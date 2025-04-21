@@ -96,4 +96,15 @@ public class RatingService {
     public Integer getTotalRatingsForSkill(Long skillId) {
         return ratingRepository.getTotalRatingsForSkill(skillId);
     }
+    /**
+     * Delete a rating by ID
+     * Returns true if deleted successfully, false if rating not found
+     */
+    public boolean deleteRating(Long id) {
+        if (ratingRepository.existsById(id)) {
+            ratingRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
