@@ -35,8 +35,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/ratings/skill/*/count").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        // Protected endpoints
-                        .anyRequest().authenticated()
+                        // Restricted endpoint for ratings requiring authentication
+                        .requestMatchers("/api/ratings/**").authenticated()
+                        // Allow all other endpoints without authentication
+                        .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))

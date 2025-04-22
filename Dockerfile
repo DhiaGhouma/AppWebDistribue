@@ -1,14 +1,11 @@
-# Use an official Java runtime as a parent image
-FROM openjdk:17-jdk-slim
-
-# Set the working directory in the container
+FROM maven:3.8-openjdk-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copy the local jar file into the container
-COPY target/Rating-service-0.0.1-SNAPSHOT.jar /app/rating-service.jar
-
-# Make port 8082 available to the world outside the container
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8082
-
-# Run the application
-ENTRYPOINT ["java", "-jar", "rating-service.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
